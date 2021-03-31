@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS noteful_folders;
+DROP EXTENSION IF EXISTS pgcrypto;
