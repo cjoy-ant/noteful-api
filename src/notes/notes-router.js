@@ -13,3 +13,5 @@ const serializeNote = (note) => ({
   folder_id: note.folder_id,
   note_content: xss(note.note_content),
 });
+
+module.exports = notesRouter;
