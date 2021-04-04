@@ -150,5 +150,25 @@ describe.only("/folders Endpoints", function () {
             .expect(postRes.body)
         );
     });
+
+    // validation testing
+    const requiredFields = ["folder_name"];
+
+    requiredFields.forEach((field) => {
+      const newFolder = {
+        folder_name: "test new folder",
+      };
+
+      it(`responds with 400 and an error message when the '${field}' is missing`, () => {
+        delete newFolder[field];
+
+        return supertest(app)
+          .post("/api/folders")
+          .send(newFolder)
+          .expect(400, {
+            error: { message: `Missing '${field}' in request body` },
+          });
+      });
+    });
   });
 });
