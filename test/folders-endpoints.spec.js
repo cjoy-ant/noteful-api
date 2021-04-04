@@ -81,5 +81,22 @@ describe.only("/folders Endpoints", function () {
           .expect(404, { error: { message: `Folder not found` } });
       });
     });
+
+    context(`Given there are folders in the database`, () => {
+      const testFolders = makeFoldersArray();
+
+      beforeEach("insert malicious folder", () => {
+        return db.into("noteful_folders").insert(testFolders);
+      });
+
+      it(`responds with 200 and the specified folder`, () => {
+        const folderId = "5bb12880-949b-11eb-a8b3-0242ac130003";
+        const expectedFolder = testFolders[1];
+
+        return supertest(app)
+          .get(`/api/folders/${folderId}`)
+          .expect(200, expectedFolder);
+      });
+    });
   });
 });
