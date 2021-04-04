@@ -12,7 +12,7 @@ const FoldersService = {
   },
 
   updateFolder(knex, id, newFolderFields) {
-    return knex("blogful_articles").where({ id }).update(newFolderFields);
+    return knex("noteful_folders").where({ id }).update(newFolderFields);
   },
 
   insertFolder(knex, newFolder) {

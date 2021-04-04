@@ -215,4 +215,44 @@ describe.only("/folders Endpoints", function () {
       });
     });
   });
+
+  describe(`PATCH /api/folders/:foler_id`, () => {
+    context(`Given no folders`, () => {
+      it(`responds with 404`, () => {
+        const folderId = "146d4c3e-94cc-11eb-a8b3-0242ac130003";
+        return supertest(app)
+          .patch(`/api/folders/${folderId}`)
+          .expect(404, { error: { message: `Folder not found` } });
+      });
+    });
+    context(`Given there are folders in the database`, () => {
+      const testFolders = makeFoldersArray();
+
+      beforeEach("insert test folders", () => {
+        return db.into("noteful_folders").insert(testFolders);
+      });
+
+      it(`responds with 204 and updates the folder`, () => {
+        const idToUpdate = "5bb12880-949b-11eb-a8b3-0242ac130003"; // test folder 2
+        const updateFolder = {
+          folder_name: "updated folder name",
+        };
+
+        const expectedFolder = {
+          ...testFolders[1],
+          ...updateFolder,
+        };
+
+        return supertest(app)
+          .patch(`/api/folders/${idToUpdate}`)
+          .send(updateFolder)
+          .expect(204)
+          .then((res) =>
+            supertest(app)
+              .get(`/api/folders/${idToUpdate}`)
+              .expect(expectedFolder)
+          );
+      });
+    });
+  });
 });
