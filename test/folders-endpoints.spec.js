@@ -37,7 +37,7 @@ describe.only("/folders Endpoints", function () {
     context("Given there are folders in the database", () => {
       const testFolders = makeFoldersArray();
 
-      beforeEach("insert folders", () => {
+      beforeEach("insert test folders", () => {
         return db.into("noteful_folders").insert(testFolders);
       });
 
@@ -85,7 +85,7 @@ describe.only("/folders Endpoints", function () {
     context(`Given there are folders in the database`, () => {
       const testFolders = makeFoldersArray();
 
-      beforeEach("insert malicious folder", () => {
+      beforeEach("insert test folders", () => {
         return db.into("noteful_folders").insert(testFolders);
       });
 
@@ -97,6 +97,58 @@ describe.only("/folders Endpoints", function () {
           .get(`/api/folders/${folderId}`)
           .expect(200, expectedFolder);
       });
+    });
+
+    context(`Given an XSS attack folder`, () => {
+      const testFolders = makeFoldersArray();
+      const { maliciousFolder, expectedFolder } = makeMaliciousFolder();
+
+      beforeEach("insert malicious folder", () => {
+        return db
+          .into("noteful_folders")
+          .insert(testFolders)
+          .then(() => {
+            return db.into("noteful_folders").insert([maliciousFolder]);
+          });
+      });
+
+      it(`removes xss attack content`, () => {
+        return supertest(app)
+          .get(`/api/folders/${maliciousFolder.id}`)
+          .expect(200)
+          .expect((res) => {
+            expect(res.body.folder_name).to.eql(expectedFolder.folder_name);
+          });
+      });
+    });
+  });
+
+  describe(`POST /api/folders/`, () => {
+    const testFolders = makeFoldersArray();
+
+    beforeEach("insert test folders", () => {
+      return db.into("noteful_folders").insert(testFolders);
+    });
+
+    it(`creates a folder, responding with 201 and the new folder`, () => {
+      const newFolder = {
+        folder_name: "test new folder",
+      };
+
+      return supertest(app)
+        .post("/api/folders")
+        .send(newFolder)
+        .expect(201)
+        .expect((res) => {
+          expect(res.body.folder_name).to.eql(newFolder.folder_name);
+          expect(res.body).to.have.property("id");
+          expect(res.headers.location).to.eql(`/api/folders/${res.body.id}`);
+        })
+        .then((postRes) =>
+          supertest(app)
+            .get(`/api/folders/${postRes.body.id}`)
+            .expect(postRes.body)
+        );
     });
   });
 });

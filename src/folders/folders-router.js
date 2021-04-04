@@ -11,34 +11,36 @@ const serializeFolder = (folder) => ({
   folder_name: xss(folder.folder_name),
 });
 
-foldersRouter.route("/").get((req, res, next) => {
-  const knex = req.app.get("db");
-  FoldersService.getAllFolders(knex)
-    .then((folders) => {
-      res.json(folders.map(serializeFolder));
-    })
-    .catch(next);
-});
-// .post(jsonParser, (req, res, next) => {
-//   const { folder_name } = req.body;
-//   const newFolder = { folder_name };
-//   const knex = req.app.get("db");
+foldersRouter
+  .route("/")
+  .get((req, res, next) => {
+    const knex = req.app.get("db");
+    FoldersService.getAllFolders(knex)
+      .then((folders) => {
+        res.json(folders.map(serializeFolder));
+      })
+      .catch(next);
+  })
+  .post(jsonParser, (req, res, next) => {
+    const { folder_name } = req.body;
+    const newFolder = { folder_name };
+    const knex = req.app.get("db");
 
-//   for (const [key, value] of Object.entries(newFolder)) {
-//     if (value == null) {
-//       return res.status(400).json({
-//         error: { message: `Missing '${key}' in request body` },
-//       });
-//     }
-//   }
+    for (const [key, value] of Object.entries(newFolder)) {
+      if (value == null) {
+        return res.status(400).json({
+          error: { message: `Missing '${key}' in request body` },
+        });
+      }
+    }
 
-//   FoldersService.insertFolder(knex, newFolder).then((folder) => {
-//     res
-//       .status(201)
-//       .location(path.posix.join(req.originalUrl, `/${folder.id}`))
-//       .json(serializeFolder(folder));
-//   });
-// });
+    FoldersService.insertFolder(knex, newFolder).then((folder) => {
+      res
+        .status(201)
+        .location(path.posix.join(req.originalUrl, `/${folder.id}`))
+        .json(serializeFolder(folder));
+    });
+  });
 
 foldersRouter
   .route("/:folder_id")
