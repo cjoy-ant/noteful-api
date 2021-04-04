@@ -258,7 +258,7 @@ describe("/notes Endpoints", function () {
     });
   });
 
-  describe.only(`PATCH /api/notes/:note_id`, () => {
+  describe(`PATCH /api/notes/:note_id`, () => {
     context(`Given no notes`, () => {
       it(`responds with 404`, () => {
         const noteId = "7f7f6206-94e4-11eb-a8b3-0242ac130003";
