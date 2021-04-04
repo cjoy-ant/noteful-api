@@ -15,3 +15,15 @@
 {"message":"note is not defined","level":"error"}
 {"message":"note is not defined","level":"error"}
 {"message":"note is not defined","level":"error"}
+{"message":"NotesService.insertNote(...).then(...).end is not a function","level":"error"}
+{"message":"NotesService.insertNote(...).then(...).end is not a function","level":"error"}
+{"message":"NotesService.insertNote(...).then(...).end is not a function","level":"error"}
+{"message":"serializeFolder is not defined","level":"error"}
+{"message":"serializeFolder is not defined","level":"error"}
+{"message":"serializeFolder is not defined","level":"error"}
+{"message":"serializeFolder is not defined","level":"error"}
+{"message":"serializeFolder is not defined","level":"error"}
+{"message":"serializeFolder is not defined","level":"error"}
+{"message":"serializeFolder is not defined","level":"error"}
+{"message":"serializeFolder is not defined","level":"error"}
+{"message":"serializeFolder is not defined","level":"error"}

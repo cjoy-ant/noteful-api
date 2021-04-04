@@ -85,7 +85,7 @@ describe("/notes Endpoints", function () {
     });
   });
 
-  describe.only(`GET /api/notes/:note_id`, () => {
+  describe(`GET /api/notes/:note_id`, () => {
     context(`Given no notes`, () => {
       it(`responds with 404`, () => {
         const noteId = "7f7f6206-94e4-11eb-a8b3-0242ac130003"; // non-existent noteId
@@ -143,11 +143,17 @@ describe("/notes Endpoints", function () {
     });
   });
 
-  describe(`POST /api/notes/`, () => {
+  describe.only(`POST /api/notes/`, () => {
+    const testFolders = makeFoldersArray();
     const testNotes = makeNotesArray();
 
     beforeEach("insert test notes", () => {
-      return db.into("noteful_notes").insert(testNotes);
+      return db
+        .into("noteful_folders")
+        .insert(testFolders)
+        .then(() => {
+          return db.into("noteful_notes").insert(testNotes);
+        });
     });
 
     it(`creates a note, responding with 201 and the new note`, () => {
@@ -179,7 +185,7 @@ describe("/notes Endpoints", function () {
     });
 
     // validation testing
-    const requiredFields = ["folder_name", "folder_id", "note_content"];
+    const requiredFields = ["note_name", "folder_id", "note_content"];
 
     requiredFields.forEach((field) => {
       const newNote = {
@@ -208,8 +214,6 @@ describe("/notes Endpoints", function () {
         .expect(201)
         .expect((res) => {
           expect(res.body.note_name).to.eql(expectedNote.note_name);
-          expect(res.body.date_modified).to.eql(expectedNote.date_modified);
-          expect(res.body.folder_id).to.eql(expectedNote.folder_id);
           expect(res.body.note_content).to.eql(expectedNote.note_content);
         });
     });
