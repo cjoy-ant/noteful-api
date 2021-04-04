@@ -63,6 +63,14 @@ foldersRouter
       id: res.folder.id,
       folder_name: xss(res.folder.folder_name),
     });
+  })
+  .delete((req, res, next) => {
+    const knexInstance = req.app.get("db");
+    FoldersService.deleteFolder(knexInstance, req.params.folder_id)
+      .then(() => {
+        res.status(204).end();
+      })
+      .catch(next);
   });
 
 module.exports = foldersRouter;

@@ -182,4 +182,15 @@ describe.only("/folders Endpoints", function () {
         });
     });
   });
+
+  describe(`DELETE /api/folders/:folder_id`, () => {
+    context(`Given no folders`, () => {
+      it(`responds with 404`, () => {
+        const folderId = "146d4c3e-94cc-11eb-a8b3-0242ac130003";
+        return supertest(app)
+          .delete(`/api/folders/${folderId}`)
+          .expect(404, { error: { message: `Folder not found` } });
+      });
+    });
+  });
 });
