@@ -31,7 +31,7 @@ describe("/notes Endpoints", function () {
     db.raw("TRUNCATE noteful_notes, noteful_folders RESTART IDENTITY CASCADE")
   );
 
-  describe.only(`GET /api/notes`, () => {
+  describe(`GET /api/notes`, () => {
     context(`Given no notes`, () => {
       it(`responds with 200 and an empty list`, () => {
         return supertest(app).get("/api/notes").expect(200, []);
@@ -85,7 +85,7 @@ describe("/notes Endpoints", function () {
     });
   });
 
-  describe(`GET /api/notes/:note_id`, () => {
+  describe.only(`GET /api/notes/:note_id`, () => {
     context(`Given no notes`, () => {
       it(`responds with 404`, () => {
         const noteId = "7f7f6206-94e4-11eb-a8b3-0242ac130003"; // non-existent noteId
@@ -96,10 +96,16 @@ describe("/notes Endpoints", function () {
     });
 
     context(`Given there are notes in the database`, () => {
+      const testFolders = makeFoldersArray();
       const testNotes = makeNotesArray();
 
       beforeEach("insert test notes", () => {
-        return db.into("noteful_notes").insert(testNotes);
+        return db
+          .into("noteful_folders")
+          .insert(testFolders)
+          .then(() => {
+            return db.into("noteful_notes").insert(testNotes);
+          });
       });
 
       it(`responds with 200 and the specified note`, () => {
@@ -113,13 +119,13 @@ describe("/notes Endpoints", function () {
     });
 
     context(`Given an XSS attack content`, () => {
-      const testNotes = makeNotesArray();
+      const testFolders = makeFoldersArray();
       const { maliciousNote, expectedNote } = makeMaliciousNote();
 
       beforeEach("insert malicious note", () => {
         return db
-          .into("noteful_notes")
-          .insert(testNotes)
+          .into("noteful_folders")
+          .insert(testFolders)
           .then(() => {
             return db.into("noteful_notes").insert([maliciousNote]);
           });
@@ -130,18 +136,8 @@ describe("/notes Endpoints", function () {
           .get(`/api/notes/${maliciousNote.id}`)
           .expect(200)
           .expect((res) => {
-            expect(res.body[res.body.length - 1].note_name).to.eql(
-              expectedNote.note_name
-            );
-            expect(res.body[res.body.length - 1].date_modified).to.eql(
-              expectedNote.date_modified
-            );
-            expect(res.body[res.body.length - 1].folder_id).to.eql(
-              expectedNote.folder_id
-            );
-            expect(res.body[res.body.length - 1].note_content).to.eql(
-              expectedNote.note_content
-            );
+            expect(res.body.note_name).to.eql(expectedNote.note_name);
+            expect(res.body.note_content).to.eql(expectedNote.note_content);
           });
       });
     });

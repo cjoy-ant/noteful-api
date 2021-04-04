@@ -64,10 +64,10 @@ notesRouter
   .get((req, res, next) => {
     res.json({
       id: res.note.id,
-      note: xss(res.note.note_name),
-      date_modified: note.date_modified,
-      folder_id: note.folder_id,
-      note_content: xss(note.note_content),
+      note_name: xss(res.note.note_name),
+      date_modified: res.note.date_modified,
+      folder_id: res.note.folder_id,
+      note_content: xss(res.note.note_content),
     });
   })
   .delete((req, res, next) => {
