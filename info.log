@@ -3,3 +3,8 @@
 {"message":"Empty .update() call detected! Update data does not contain any values to update. This will result in a faulty query. Table: blogful_articles. Columns: updated folder name.","level":"error"}
 {"message":"Empty .update() call detected! Update data does not contain any values to update. This will result in a faulty query. Table: blogful_articles. Columns: updated folder name.","level":"error"}
 {"message":"update \"noteful_articles\" set \"folder_name\" = $1 where \"id\" = $2 - relation \"noteful_articles\" does not exist","level":"error"}
+{"message":"seralizeNote is not defined","level":"error"}
+{"message":"seralizeNote is not defined","level":"error"}
+{"message":"seralizeNote is not defined","level":"error"}
+{"message":"seralizeNote is not defined","level":"error"}
+{"message":"seralizeNote is not defined","level":"error"}

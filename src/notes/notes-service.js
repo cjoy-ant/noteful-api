@@ -1,5 +1,5 @@
 const NotesService = {
-  getAllFolders(knex) {
+  getAllNotes(knex) {
     return knex.select("*").from("noteful_notes");
   },
 
@@ -7,17 +7,17 @@ const NotesService = {
     return knex.from("noteful_notes").select("*").where("id", id).first();
   },
 
-  deleteFolder(knex, id) {
+  deleteNote(knex, id) {
     return knex("noteful_notes").where({ id }).delete();
   },
 
-  updateFolder(knex, id, newFolderFields) {
-    return knex("blogful_articles").where({ id }).update(newFolderFields);
+  updateNote(knex, id, newNoteFields) {
+    return knex("noteful_notes").where({ id }).update(newNoteFields);
   },
 
-  insertFolder(knex, newFolder) {
+  insertNote(knex, newNote) {
     return knex
-      .insert(newFolder)
+      .insert(newNote)
       .into("noteful_notes")
       .returning("*")
       .then((rows) => {

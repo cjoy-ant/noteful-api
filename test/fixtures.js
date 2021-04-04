@@ -60,7 +60,7 @@ function makeMaliciousNote() {
     id: "40250054-949c-11eb-a8b3-0242ac130003",
     note_name: 'Naughty naughty very naughty <script>alert("xss");</script>',
     date_modified: new Date().toISOString(),
-    folder_id: "39d297c0-949c-11eb-a8b3-0242ac130003",
+    folder_id: "52a5d0ce-949b-11eb-a8b3-0242ac130003", // test folder 1
     note_content: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
   };
 

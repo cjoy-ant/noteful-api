@@ -4,7 +4,7 @@ const supertest = require("supertest");
 const app = require("../src/app");
 const { makeFoldersArray, makeMaliciousFolder } = require("./fixtures");
 
-describe.only("/folders Endpoints", function () {
+describe("/folders Endpoints", function () {
   let db;
 
   before("make knex instance", () => {
@@ -216,7 +216,7 @@ describe.only("/folders Endpoints", function () {
     });
   });
 
-  describe(`PATCH /api/folders/:foler_id`, () => {
+  describe(`PATCH /api/folders/:folder_id`, () => {
     context(`Given no folders`, () => {
       it(`responds with 404`, () => {
         const folderId = "146d4c3e-94cc-11eb-a8b3-0242ac130003";
