@@ -98,5 +98,28 @@ describe.only("/folders Endpoints", function () {
           .expect(200, expectedFolder);
       });
     });
+
+    context(`Given an XSS attack folder`, () => {
+      const testFolders = makeFoldersArray();
+      const { maliciousFolder, expectedFolder } = makeMaliciousFolder();
+
+      beforeEach("insert malicious folder", () => {
+        return db
+          .into("noteful_folders")
+          .insert(testFolders)
+          .then(() => {
+            return db.into("noteful_folders").insert([maliciousFolder]);
+          });
+      });
+
+      it(`removes xss attack content`, () => {
+        return supertest(app)
+          .get(`/api/folders/${maliciousFolder.id}`)
+          .expect(200)
+          .expect((res) => {
+            expect(res.body.folder_name).to.eql(expectedFolder.folder_name);
+          });
+      });
+    });
   });
 });
