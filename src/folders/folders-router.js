@@ -40,4 +40,27 @@ foldersRouter.route("/").get((req, res, next) => {
 //   });
 // });
 
+foldersRouter
+  .route("/:folder_id")
+  .all((req, res, next) => {
+    const knexInstance = req.app.get("db");
+    FoldersService.getById(knexInstance, req.params.folder_id)
+      .then((folder) => {
+        if (!folder) {
+          return res.status(404).json({
+            error: { message: `Folder not found` },
+          });
+        }
+        res.folder = folder;
+        next();
+      })
+      .catch(next);
+  })
+  .get((req, res, next) => {
+    res.json({
+      id: res.folder.id,
+      folder_name: xss(res.folder.folder_name),
+    });
+  });
+
 module.exports = foldersRouter;
