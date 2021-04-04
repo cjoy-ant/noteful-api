@@ -192,5 +192,27 @@ describe.only("/folders Endpoints", function () {
           .expect(404, { error: { message: `Folder not found` } });
       });
     });
+
+    context(`Given there are folders in the database`, () => {
+      const testFolders = makeFoldersArray();
+
+      beforeEach("insert test folders", () => {
+        return db.into("noteful_folders").insert(testFolders);
+      });
+
+      it(`responds with 204 and removes the folder`, () => {
+        const idToRemove = "5bb12880-949b-11eb-a8b3-0242ac130003"; // test folder 2
+        const expectedFolders = testFolders.filter(
+          (folder) => folder.id !== idToRemove
+        );
+
+        return supertest(app)
+          .delete(`/api/folders/${idToRemove}`)
+          .expect(204)
+          .then((res) =>
+            supertest(app).get(`/api/folders`).expect(expectedFolders)
+          );
+      });
+    });
   });
 });
