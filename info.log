@@ -39,3 +39,8 @@
 {"message":"Cannot read property 'select' of undefined","level":"error"}
 {"message":"Cannot read property 'select' of undefined","level":"error"}
 {"message":"Cannot read property 'select' of undefined","level":"error"}
+{"message":"select * from \"noteful_folders\" where \"id\" = $1 limit $2 - invalid input syntax for type uuid: \"undefined\"","level":"error"}
+{"message":"select * from \"noteful_folders\" where \"id\" = $1 limit $2 - invalid input syntax for type uuid: \"undefined\"","level":"error"}
+{"message":"select * from \"noteful_folders\" where \"id\" = $1 limit $2 - invalid input syntax for type uuid: \"undefined\"","level":"error"}
+{"message":"select * from \"noteful_notes\" where \"id\" = $1 limit $2 - invalid input syntax for type uuid: \"folders\"","level":"error"}
+{"message":"select * from \"noteful_notes\" where \"id\" = $1 limit $2 - invalid input syntax for type uuid: \"folders\"","level":"error"}
