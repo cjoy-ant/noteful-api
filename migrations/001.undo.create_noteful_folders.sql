@@ -1,2 +1,2 @@
 DROP TABLE IF EXISTS noteful_folders;
-DROP EXTENSION IF EXISTS pgcrypto;
+DROP EXTENSION IF EXISTS uuid-ossp;
